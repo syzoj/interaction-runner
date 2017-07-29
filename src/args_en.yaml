@@ -1,6 +1,6 @@
 name: intertest
 version: "0.1"
-about: OI interact problem test tool.
+about: Local runner for interaction problems of SYZOJ.
 author: Peng Guanwen <pgw1999@outlook.com>
 
 settings:
@@ -18,7 +18,7 @@ args:
         short: s
         long: show-status
     - tee:
-        help: Tee output of both program to stdio. (Comming soon)
+        help: Tee output of both programs to stdio. (Comming soon)
         short: t
         long: tee
     #     multiple: true
