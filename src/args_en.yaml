@@ -1,0 +1,25 @@
+name: intertest
+version: "0.1"
+about: OI interact problem test tool.
+author: Peng Guanwen <pgw1999@outlook.com>
+
+settings:
+    - ArgRequiredElseHelp
+
+args:
+    - prg1:
+        index: 1
+        required: true
+    - prg2:
+        index: 2
+        required: true
+    - show_status:
+        help: Show exit status of the programs.
+        short: s
+        long: show-status
+    - tee:
+        help: Tee output of both program to stdio. (Comming soon)
+        short: t
+        long: tee
+    #     multiple: true
+    #     takes_value: true
