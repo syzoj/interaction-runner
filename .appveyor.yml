@@ -54,4 +54,4 @@ cache:
 
 artifacts:
     - path: target/release/intertest.exe
-      name: intertest-v0.1.{build}
+      name: intertest-v0.1
