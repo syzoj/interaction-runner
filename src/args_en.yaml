@@ -8,11 +8,18 @@ settings:
 
 args:
     - prg1:
+        help: One of the programs.
         index: 1
         required: true
     - prg2:
+        help: The other one of the programs.
         index: 2
         required: true
+    - use_shell:
+        help: Treat <prg> as shell commands .
+        long_help: Treat <prg> as shell commands rather than executables. With this option you can use shell builtin or give arguments, for example `echo 123` or `python abc.py`
+        short: c
+        long: use-shell
     - show_status:
         help: Show exit status of the programs.
         short: s

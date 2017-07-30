@@ -15,8 +15,23 @@ fn main() {
     let prg1 = matches.value_of("prg1").unwrap();
     let prg2 = matches.value_of("prg2").unwrap();
 
-    let mut cmd1 = Command::new(prg1);
-    let mut cmd2 = Command::new(prg2);
+    let (mut cmd1, mut cmd2) = if !matches.is_present("use_shell") {
+        (Command::new(prg1), Command::new(prg2))
+    } else {
+        #[cfg(unix)]
+        let (shell, flag) = ("sh", "-c");
+        #[cfg(windows)]
+        let (shell, flag) = ("cmd", "/c");
+        
+        let mut cmd1 = Command::new(shell);
+        cmd1.arg(flag)
+            .arg(prg1);
+        let mut cmd2 = Command::new(shell);
+        cmd2.arg(flag)
+            .arg(prg2);
+
+        (cmd1, cmd2)
+    };
 
     let (to2, from1) = pipe().unwrap();
     let (to1, from2) = pipe().unwrap();
