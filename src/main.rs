@@ -22,13 +22,11 @@ fn main() {
         let (shell, flag) = ("sh", "-c");
         #[cfg(windows)]
         let (shell, flag) = ("cmd", "/c");
-        
+
         let mut cmd1 = Command::new(shell);
-        cmd1.arg(flag)
-            .arg(prg1);
+        cmd1.arg(flag).arg(prg1);
         let mut cmd2 = Command::new(shell);
-        cmd2.arg(flag)
-            .arg(prg2);
+        cmd2.arg(flag).arg(prg2);
 
         (cmd1, cmd2)
     };
