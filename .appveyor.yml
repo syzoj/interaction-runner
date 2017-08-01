@@ -41,7 +41,7 @@ build_script:
     - cargo build --release --verbose %cargoflags%
 
 after_build:
-    - copy target/release/intertest.exe .
+    - 'copy target\release\intertest.exe .'
     - 7z a intertest-windows.zip intertest.exe
 
 # Uses 'cargo test' to run tests and build. Alternatively, the project may call compiled programs
