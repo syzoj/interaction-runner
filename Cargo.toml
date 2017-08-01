@@ -1,6 +1,6 @@
 [package]
 name = "intertest"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Peng Guanwen <pgw1999@outlook.com>"]
 
 [dependencies]
