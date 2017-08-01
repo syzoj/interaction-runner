@@ -6,16 +6,12 @@ extern crate os_pipe;
 extern crate clap;
 
 use clap::App;
-use std::process::Command;
+use std::process::{Command, ExitStatus};
+use std::io::Result;
 use os_pipe::{pipe, IntoStdio};
 
-fn main() {
-    let args = load_yaml!("args_en.yaml");
-    let matches = App::from_yaml(args).get_matches();
-    let prg1 = matches.value_of("prg1")?;
-    let prg2 = matches.value_of("prg2")?;
-
-    let (mut cmd1, mut cmd2) = if !matches.is_present("use_shell") {
+fn run_cmd(prg1: &str, prg2: &str, use_shell: bool) -> Result<(ExitStatus, ExitStatus)> {
+    let (mut cmd1, mut cmd2) = if !use_shell {
         (Command::new(prg1), Command::new(prg2))
     } else {
         #[cfg(unix)]
@@ -44,8 +40,17 @@ fn main() {
 
     drop(cmd1);
     drop(cmd2);
-    let r1 = handle1.wait()?;
-    let r2 = handle2.wait()?;
+    Ok((handle1.wait()?, handle2.wait()?))
+}
+
+fn main() {
+    let args = load_yaml!("args_en.yaml");
+    let matches = App::from_yaml(args).get_matches();
+    let prg1 = matches.value_of("prg1").unwrap();
+    let prg2 = matches.value_of("prg2").unwrap();
+
+    let (r1, r2) = run_cmd(prg1, prg2, matches.is_present("use_shell"))
+        .expect("There's something wrong.");
 
     if matches.is_present("show_status") {
         println!("{}: {}", prg1, r1);
