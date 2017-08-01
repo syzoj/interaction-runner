@@ -7,6 +7,7 @@ rust:
 script:
     - cargo build --release --verbose
     - cargo test --verbose
+    - zip target/release/intertest-linux.zip target/release/intertest
 
 cache: cargo
 
@@ -15,7 +16,7 @@ deploy:
     skip_cleanup: true
     api_key:
         secure: MgX69u64PyRJ3qhAHPgwM1ThFY4ADyfKpCmPghNgLuN9pLtBEAwJrWMymZQ5VYtDTPKLtViOxTS03ZuEjEIODXzXplqllNvqQ0d6IjInIG5moiTN83YPBVDUazV7NG04AxNn+tqxdGvdaryfJVi81Suy42+ecEJ9N+end4gmL5we3gq8zePS36EVEVWppquikjRHnFzlw2JgHAt0ax3lqmVjcl5wY/Sc5JsNJoV53CPT7ZO/0BPu4Qwe1BVLyeTFk9ZKFARsnvCrn2eqGNOh18PzTmKAEdPodz8b1x8B+TK8AQ1RDVRTqikEqgi6wa22Sg9+bditBTNKIZGlaLfiRw6OmcpHEsWMAgTrBCwr6jOXg6D6jZ7hkyl30hQWyr/1+wUKS78f0dFVZB4PrEkMtntn2zX8X7r01D+u38Fhym2ZOV6UcfqUtNugOHE0HaKx1FWrhhMk0CprJRaWRxD4ystBviDHjNnnQXIlQW+F913zMIQhWmKWNH+SKx2tLamxAIHgS9bwBbSwVAw4yrf8irXskav+fHHDhrJfVBNfD8smMEeQUEJ9fQGiNNVDasNNddh31KyZrn3XpDwHtubLjQXOWq5wkDILeds5CDnHNZ2Ux2uvueoFHZjTrcz6/i703HRgUsuzihiFU8380EkFCOmh78v1RKjCAp5xGmyBsSM=
-    file: target/release/intertest
+    file: target/release/intertest-linux.zip
     on:
         repo: syzoj/interaction-runner
         tags: true
