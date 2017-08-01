@@ -12,8 +12,8 @@ use os_pipe::{pipe, IntoStdio};
 fn main() {
     let args = load_yaml!("args_en.yaml");
     let matches = App::from_yaml(args).get_matches();
-    let prg1 = matches.value_of("prg1").unwrap();
-    let prg2 = matches.value_of("prg2").unwrap();
+    let prg1 = matches.value_of("prg1")?;
+    let prg2 = matches.value_of("prg2")?;
 
     let (mut cmd1, mut cmd2) = if !matches.is_present("use_shell") {
         (Command::new(prg1), Command::new(prg2))
@@ -31,21 +31,21 @@ fn main() {
         (cmd1, cmd2)
     };
 
-    let (to2, from1) = pipe().unwrap();
-    let (to1, from2) = pipe().unwrap();
+    let (to2, from1) = pipe()?;
+    let (to1, from2) = pipe()?;
 
     cmd1.stdin(to1.into_stdio());
     cmd2.stdin(to2.into_stdio());
     cmd1.stdout(from1.into_stdio());
     cmd2.stdout(from2.into_stdio());
 
-    let mut handle1 = cmd1.spawn().unwrap();
-    let mut handle2 = cmd2.spawn().unwrap();
+    let mut handle1 = cmd1.spawn()?;
+    let mut handle2 = cmd2.spawn()?;
 
     drop(cmd1);
     drop(cmd2);
-    let r1 = handle1.wait().unwrap();
-    let r2 = handle2.wait().unwrap();
+    let r1 = handle1.wait()?;
+    let r2 = handle2.wait()?;
 
     if matches.is_present("show_status") {
         println!("{}: {}", prg1, r1);
