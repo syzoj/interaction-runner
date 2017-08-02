@@ -10,22 +10,27 @@ use std::process::{Command, ExitStatus};
 use std::io::Result;
 use os_pipe::{pipe, IntoStdio};
 
-fn run_cmd(prg1: &str, prg2: &str, use_shell: bool) -> Result<(ExitStatus, ExitStatus)> {
-    let (mut cmd1, mut cmd2) = if !use_shell {
-        (Command::new(prg1), Command::new(prg2))
+fn make_cmd(prg: &str, use_shell: bool) -> Command {
+    if !use_shell {
+        Command::new(prg)
     } else {
         #[cfg(unix)]
         let (shell, flag) = ("sh", "-c");
         #[cfg(windows)]
         let (shell, flag) = ("cmd", "/c");
 
-        let mut cmd1 = Command::new(shell);
-        cmd1.arg(flag).arg(prg1);
-        let mut cmd2 = Command::new(shell);
-        cmd2.arg(flag).arg(prg2);
+        let mut cmd = Command::new(shell);
+        cmd.arg(flag).arg(prg);
+        cmd
+    }
 
-        (cmd1, cmd2)
-    };
+}
+
+fn tee() {}
+
+fn run_cmd(prg1: &str, prg2: &str, use_shell: bool, tee: bool) -> Result<(ExitStatus, ExitStatus)> {
+    let mut cmd1 = make_cmd(prg1, use_shell);
+    let mut cmd2 = make_cmd(prg2, use_shell);
 
     let (to2, from1) = pipe()?;
     let (to1, from2) = pipe()?;
@@ -34,7 +39,17 @@ fn run_cmd(prg1: &str, prg2: &str, use_shell: bool) -> Result<(ExitStatus, ExitS
     cmd2.stdin(to2.into_stdio());
     cmd1.stdout(from1.into_stdio());
     cmd2.stdout(from2.into_stdio());
+    // } else {
+    //     let (totee2, from1) = pipe()?;
+    //     let (to2, fromtee2) = pipe()?;
+    //     let (totee1, from2) = pipe()?;
+    //     let (to1, fromtee1) = pipe()?;
 
+    //     cmd1.stdin(to1.into_stdio());
+    //     cmd2.stdin(to2.into_stdio());
+    //     cmd1.stdout(from1.into_stdio());
+    //     cmd2.stdout(from2.into_stdio());
+    // }
     let mut handle1 = cmd1.spawn()?;
     let mut handle2 = cmd2.spawn()?;
 
@@ -49,8 +64,12 @@ fn main() {
     let prg1 = matches.value_of("prg1").unwrap();
     let prg2 = matches.value_of("prg2").unwrap();
 
-    let (r1, r2) = run_cmd(prg1, prg2, matches.is_present("use_shell"))
-        .expect("There's something wrong.");
+    let (r1, r2) = run_cmd(
+        prg1,
+        prg2,
+        matches.is_present("use_shell"),
+        matches.is_present("tee"),
+    ).expect("There's something wrong.");
 
     if matches.is_present("show_status") {
         println!("{}: {}", prg1, r1);
