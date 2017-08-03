@@ -26,7 +26,7 @@ fn make_cmd(prg: &str, use_shell: bool) -> Command {
 
 }
 
-fn run_cmd(prg1: &str, prg2: &str, use_shell: bool, tee: bool) -> Result<(ExitStatus, ExitStatus)> {
+fn run_cmd(prg1: &str, prg2: &str, use_shell: bool) -> Result<(ExitStatus, ExitStatus)> {
     let mut cmd1 = make_cmd(prg1, use_shell);
     let mut cmd2 = make_cmd(prg2, use_shell);
 
@@ -52,12 +52,8 @@ fn main() {
     let prg1 = matches.value_of("prg1").unwrap();
     let prg2 = matches.value_of("prg2").unwrap();
 
-    let (r1, r2) = run_cmd(
-        prg1,
-        prg2,
-        matches.is_present("use_shell"),
-        matches.is_present("tee"),
-    ).expect("There's something wrong.");
+    let (r1, r2) = run_cmd(prg1, prg2, matches.is_present("use_shell"))
+        .expect("There's something wrong.");
 
     if matches.is_present("show_status") {
         println!("{}: {}", prg1, r1);
