@@ -14,7 +14,7 @@ fn make_cmd(prg: &str, use_shell: bool) -> Command {
     if !use_shell {
         Command::new(prg)
     } else {
-        #[cfg(unix)]
+        #[cfg(not(windows))]
         let (shell, flag) = ("sh", "-c");
         #[cfg(windows)]
         let (shell, flag) = ("cmd", "/c");
@@ -25,8 +25,6 @@ fn make_cmd(prg: &str, use_shell: bool) -> Command {
     }
 
 }
-
-fn tee() {}
 
 fn run_cmd(prg1: &str, prg2: &str, use_shell: bool, tee: bool) -> Result<(ExitStatus, ExitStatus)> {
     let mut cmd1 = make_cmd(prg1, use_shell);
@@ -39,17 +37,7 @@ fn run_cmd(prg1: &str, prg2: &str, use_shell: bool, tee: bool) -> Result<(ExitSt
     cmd2.stdin(to2.into_stdio());
     cmd1.stdout(from1.into_stdio());
     cmd2.stdout(from2.into_stdio());
-    // } else {
-    //     let (totee2, from1) = pipe()?;
-    //     let (to2, fromtee2) = pipe()?;
-    //     let (totee1, from2) = pipe()?;
-    //     let (to1, fromtee1) = pipe()?;
 
-    //     cmd1.stdin(to1.into_stdio());
-    //     cmd2.stdin(to2.into_stdio());
-    //     cmd1.stdout(from1.into_stdio());
-    //     cmd2.stdout(from2.into_stdio());
-    // }
     let mut handle1 = cmd1.spawn()?;
     let mut handle2 = cmd2.spawn()?;
 

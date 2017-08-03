@@ -24,9 +24,5 @@ args:
         help: Show exit status of the programs.
         short: s
         long: show-status
-    - tee:
-        help: Tee output of both programs to stdio. (Comming soon)
-        short: t
-        long: tee
     #     multiple: true
     #     takes_value: true
