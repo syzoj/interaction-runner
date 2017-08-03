@@ -7,10 +7,12 @@ rust:
 script:
     - cargo build --release --verbose
     - cargo test --verbose
-    - cp target/release/intertest .
-    - zip intertest-linux.zip intertest
 
 cache: cargo
+
+before_deploy:
+    - cp target/release/intertest .
+    - zip intertest-linux.zip intertest
 
 deploy:
     provider: releases
