@@ -48,7 +48,7 @@ fn run_cmd(prg1: &str, prg2: &str, use_shell: bool) -> Result<(ExitStatus, ExitS
 
 fn main() {
     let args = load_yaml!("args_en.yaml");
-    let matches = App::from_yaml(args).get_matches();
+    let matches = App::from_yaml(args).version(crate_version!()).get_matches();
     let prg1 = matches.value_of("prg1").unwrap();
     let prg2 = matches.value_of("prg2").unwrap();
 

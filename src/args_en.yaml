@@ -1,5 +1,4 @@
 name: intertest
-version: "0.1.2"
 about: Local runner for interaction problems of SYZOJ.
 author: Peng Guanwen <pgw1999@outlook.com>
 
